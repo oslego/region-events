@@ -19,45 +19,6 @@ body {
     padding: 0 0 1em;
     line-height: 1.4em; }
 
-#controller {
-  font-family: helvetica, arial, sans-serif;
-  font-size: 0.8em;
-  background: black;
-  padding: 3px 5px 3px 10px;
-  float: left;
-  color: #eee;
-  position: relative;
-  margin-top: -50px;
-  opacity: 0;
-  -webkit-transition: opacity 0.25s ease-in-out, margin 0.25s ease-in-out; }
-  #controller.visible {
-    margin-top: -40px;
-    opacity: 1; }
-
-#controller::after {
-  position: absolute;
-  right: 25%;
-  content: " ";
-  bottom: -8px;
-  display: block;
-  width: 0;
-  height: 0;
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-top: 10px solid black;
-  border-bottom: 0; }
-
-#abstract {
-  color: green;
-  -webkit-flow-into: abstract; }
-
-#introduction {
-  color: blue;
-  -webkit-flow-into: introduction; }
-
-#flows {
-  -webkit-flow-into: flows; }
-
 .page {
   position: relative;
   width: 100%;
