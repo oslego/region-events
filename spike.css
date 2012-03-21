@@ -1,0 +1,90 @@
+/* quick reset */
+body, html, div, h1, h2, h3, h4, p, span, a, ul, ol, li, table, td, tr, th {
+  margin: 0;
+  padding: 0; }
+
+body {
+  background: #eee; }
+
+#workspace {
+  margin: 50px auto 0;
+  width: 1024px;
+  height: 768px;
+  position: relative; }
+
+#content {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+  -webkit-flow-into: article; }
+  #content p {
+    padding: 0 0 1em;
+    line-height: 1.4em; }
+
+#controller {
+  font-family: helvetica, arial, sans-serif;
+  font-size: 0.8em;
+  background: black;
+  padding: 3px 5px 3px 10px;
+  float: left;
+  color: #eee;
+  position: relative;
+  margin-top: -50px;
+  opacity: 0;
+  -webkit-transition: opacity 0.25s ease-in-out, margin 0.25s ease-in-out; }
+  #controller.visible {
+    margin-top: -40px;
+    opacity: 1; }
+
+#controller::after {
+  position: absolute;
+  right: 25%;
+  content: " ";
+  bottom: -8px;
+  display: block;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid black;
+  border-bottom: 0; }
+
+#abstract {
+  color: green;
+  -webkit-flow-into: abstract; }
+
+#introduction {
+  color: blue;
+  -webkit-flow-into: introduction; }
+
+#flows {
+  -webkit-flow-into: flows; }
+
+.page {
+  position: relative;
+  width: 100%;
+  height: 100%; }
+
+.region {
+  position: absolute;
+  outline: 1px solid red;
+  -webkit-region-break: auto;
+  overflow: hidden; }
+
+#region1 {
+  -webkit-flow-from: article; }
+
+#region1,
+#region2,
+#region3 {
+  width: 50%; }
+
+#region1 {
+  height: 25%; }
+
+#region2 {
+  height: 70%;
+  bottom: 0; }
+
+#region3 {
+  right: 0%;
+  height: 100%;
+  width: 45%; }
