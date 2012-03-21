@@ -1,10 +1,61 @@
 <!DOCTYPE HTML>
 <html lang="ru-RU">
 <head>
-    <title></title>
+    <title>CSS Regions - region click event workaround</title>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="spike.css" />  
-    <script type="text/javascript" src="underscore-1.2.4.js"></script>
+    <style type="text/css">
+    
+    /* quick reset */
+    body, html, div, h1, h2, h3, h4, p, span, a, ul, ol, li, table, td, tr, th {
+      margin: 0;
+      padding: 0; }
+
+    body {
+      background: #eee; }
+
+    #workspace {
+      margin: 50px auto 0;
+      width: 1024px;
+      height: 768px;
+      position: relative; }
+
+    #content {
+      font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, FreeSerif, serif;
+      -webkit-flow-into: article; }
+      #content p {
+        padding: 0 0 1em;
+        line-height: 1.4em; }
+
+    .page {
+      position: relative;
+      width: 100%;
+      height: 100%; }
+
+    .region {
+      position: absolute;
+      outline: 1px solid red;
+      -webkit-region-break: auto; 
+      -webkit-flow-from: article;
+      overflow: hidden; }
+
+    #region1,
+    #region2,
+    #region3 {
+      width: 50%; }
+
+    #region1 {
+      height: 25%; }
+
+    #region2 {
+      height: 70%;
+      bottom: 0; }
+
+    #region3 {
+      right: 0%;
+      height: 100%;
+      width: 45%; }
+    
+    </style>
 </head>
 <body>
     <div id="workspace">
@@ -16,13 +67,6 @@
         </div>
         
     </div>
-    
-    <form action="#" id="controller">
-        <label>
-            <span>Flow from</span>
-            <select name="flow"></select>
-        </label>
-    </form>
     
     <div id="content">
         <h1>
@@ -48,18 +92,31 @@
     
     function handleRegionClick(e){
         console.log("Clicked region: " + e.target.id)
-    }
+    }  
     
-    _.each(document.querySelectorAll("[data-region]"), function(item, index){
-        item.addEventListener("click", handleRegionClick, false)
-    });   
+    function getAllRegions(){
+        var regions = document.querySelectorAll('[data-region]'); 
+        
+        // return an array of regions or an empty array
+        return (regions && regions.length)? Array.prototype.slice.call(regions) : [];
+    } 
+    
+    document.addEventListener("DOMContentLoaded", function(e){
+        var regions = getAllRegions();    
+        
+        regions.forEach(function(region){
+            region.addEventListener("click", handleRegionClick);
+        })
+    })   
     
     // Hack to make regions trigger click event handlers
     // Workaround for bug #76454 - https://bugs.webkit.org/show_bug.cgi?id=76454        
-    document.addEventListener("click", function(e){  
-        var regions = document.querySelectorAll('[data-region]');     
+    document.addEventListener("click", function(e){ 
         
-        var region = _.find(regions, function(item, index){
+        var regions = getAllRegions();  
+        
+        // find any region under the click position
+        var region = regions.filter(function(item, index){
             var rect = item.getBoundingClientRect(),
                 yMinOffset = rect.top,
                 yMaxOffset = rect.top + rect.height,  
@@ -73,11 +130,14 @@
         })       
         
         // if there's a region under the click, simulate a click event
-        if (region){   
+        // Array.filter returns an array so "region" is actually a [region]
+        if (region && region.length){   
             var evt = document.createEvent("MouseEvents");
             
             evt.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-            region.dispatchEvent(evt);
+            
+            // dirty hack - using just the first region
+            region[0].dispatchEvent(evt);
         }
         
     }, false);   
